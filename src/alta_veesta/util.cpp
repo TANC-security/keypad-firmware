@@ -38,6 +38,11 @@ void write_sys_info() {
 	Serial.print(VERSION);
 	Serial.print(F("\",\"kpaddr\":\""));
 	Serial.print(fetch_kpaddr(), DEC);
+	#ifdef LRR_SUPERVISOR
+	Serial.print(F("\",\"lrr_supervisor\":true"));
+	#else
+	Serial.print(F("\",\"lrr_supervisor\":false"));
+	#endif
 	Serial.println(F("\"}"));
 }
 
