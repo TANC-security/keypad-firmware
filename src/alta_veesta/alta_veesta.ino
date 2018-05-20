@@ -56,6 +56,7 @@ volatile unsigned long low_time = 0;
 bool   mid_msg = false;
 bool   mid_ack = false;
 
+
 struct trouble {
 	int code;
 	short qual;
@@ -291,8 +292,6 @@ no alarm
  */
 void on_status(char cbuf[], int *idx) {
 
-
-
 	//byte 2 is lenth of message
 	//byte 3 is lenth of headers
 	//last byte of headers is counter
@@ -347,34 +346,41 @@ void on_status(char cbuf[], int *idx) {
 	short fault         = (cbuf[22] & 0x04);
 	short panic         = (cbuf[22] & 0x08);
 
+	char* sep = ", ";
 	//print as JSON
 	Serial.print("{\"type\":\"status\"");
 
-	Serial.print(",\"armed\": ");
+	
+	Serial.print(sep);
+	Serial.print(F("\"armed\": "));
 	if (armed) {
 		Serial.print(F("\"yes\""));
 	} else {
 		Serial.print(F("\"no\""));
 	}
-	Serial.print(", \"mode\": ");
+	Serial.print(sep);
+	Serial.print("\"mode\": ");
 	if (away) {
 		Serial.print("\"away\"");
 	} else {
 		Serial.print("\"stay\"");
 	}
-	Serial.print(", \"ignore_faults\": ");
+	Serial.print(sep);
+	Serial.print(F("\"ignore_faults\": "));
 	if (ignore_faults) {
 		Serial.print(F("\"yes\""));
 	} else {
 		Serial.print(F("\"no\""));
 	}
-	Serial.print(", \"faulted\": ");
+	Serial.print(sep);
+	Serial.print(F("\"faulted\": "));
 	if (fault) {
 		Serial.print(F("\"yes\""));
 	} else {
 		Serial.print(F("\"no\""));
 	}
-	Serial.print(", \"panic\": ");
+	Serial.print(sep);
+	Serial.print(F("\"panic\": "));
 	if (panic) {
 		Serial.print(F("\"yes\""));
 	} else {
@@ -386,12 +392,12 @@ void on_status(char cbuf[], int *idx) {
 
 	if ( armed && fault && !ignore_faults ) {
 		on_alarm();
-		Serial.println ("{\"type\": \"alarm\"}");
+		Serial.println (F("{\"type\": \"alarm\"}"));
 		//save gcbuf for debugging
 		strncpy(alarm_buf[0],  cbuf, 30);
 	} else if ( !armed && fault && !ignore_faults) {
 		//away bit always flips to 0x02 when alarm is canceled
-		Serial.println ("{\"type\": \"cancel\"}");
+		Serial.println (F("{\"type\": \"cancel\"}"));
 	} else {
 		//Serial.println ("F2: no alarm");
 	}
@@ -411,22 +417,10 @@ void on_display(char cbuf[], int *idx) {
 
     // print out message as JSON
     Serial.print("{\"type\":\"display\"");
+	char* sep = ", ";
+
     for (int x = 0; x <= 10 ; x++) {
         switch ( x ) {
-		/*
-            case 1:
-                Serial.print(",");
-                Serial.print(" \"addr1\": \"");
-                print_hex( cbuf[x], 8);
-                Serial.print("\"");
-                break;
-            case 2:
-                Serial.print(",");
-                Serial.print(" \"addr2\": \"");
-                print_hex( cbuf[x], 8);
-                Serial.print("\"");
-                break;
-				*/
             case 3:
 				if (cbuf[x] & 0x02) {
                     Serial.print(", \"kp17\": \"active\"");
@@ -449,23 +443,7 @@ void on_display(char cbuf[], int *idx) {
 				if (cbuf[x] & 0x80) {
                     Serial.print(", \"kp23\": \"active\"");
 				}
-//                print_hex( cbuf[x], 8);
-//                Serial.print("\",");
                 break;
-				/*
-            case 4:
-                Serial.print(",");
-                Serial.print(" \"addr4\": \"");
-                print_hex( cbuf[x], 8);
-                Serial.print("\"");
-                break;
-            case 5:
-                Serial.print(",");
-                Serial.print(" \"zone\": \"");
-                print_hex( cbuf[x], 8);
-                Serial.print("\"");
-                break;
-				*/
             case 6:
                 if ( (cbuf[x] & BIT_MASK_BYTE1_BEEP ) > 0 ) {
                     Serial.print(",");
@@ -475,71 +453,65 @@ void on_display(char cbuf[], int *idx) {
                 }
                 break;
             case 7:
+				Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE2_ARMED_HOME ) ) {
-                    Serial.print(", \"ARMED_STAY\": \"true\"");
+                    Serial.print("\"ARMED_STAY\": true");
                 } else {
-                    Serial.print(", \"ARMED_STAY\": \"false\"");
+                    Serial.print("\"ARMED_STAY\": false");
                 }
+				Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE2_LOW_BAT ) ) {
-                    Serial.print(", \"low_batt\": \"true\"");
+                    Serial.print("\"low_batt\": true");
                 }
 
+				Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE2_READY )) {
-                    Serial.print(", \"READY\": \"true\"");
+                    Serial.print("\"READY\": \"true\"");
                 } else {
-                    Serial.print(", \"READY\": \"false\"");
+                    Serial.print("\"READY\": \"false\"");
                 }
-//                print_hex( cbuf[x], 8);
                 break;
             case 8:
+				Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE3_CHIME_MODE ) ) {
-                    Serial.print(F(", \"chime\": \"on\""));
+                    Serial.print(F("\"chime\": \"on\""));
                 } else {
-                    Serial.print(F(", \"chime\": \"off\""));
-                }
-                if ( (cbuf[x] & BIT_MASK_BYTE3_BYPASS ) ) {
-                    Serial.print(F(", \"bypass_zone\": true"));
+                    Serial.print(F("\"chime\": \"off\""));
                 }
 
+                if ( (cbuf[x] & BIT_MASK_BYTE3_BYPASS ) ) {
+					Serial.print(sep);
+                    Serial.print(F("\"bypass_zone\": true"));
+                }
+
+				Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE3_AC_POWER ) ) {
-                    Serial.print(F(", \"ac_power\": \"on\""));
+                    Serial.print(F("\"ac_power\": \"on\""));
                 } else {
-                    Serial.print(F(", \"ac_power\": \"off\""));
+                    Serial.print(F("\"ac_power\": \"off\""));
                 }
+
+				Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE3_ARMED_AWAY ) > 0 ) {
-                    Serial.print(F(", \"ARMED_AWAY\": \"true\""));
+                    Serial.print(F("\"ARMED_AWAY\": true"));
                 } else {
-                    Serial.print(F(", \"ARMED_AWAY\": \"false\""));
+                    Serial.print(F("\"ARMED_AWAY\": false"));
                 }
-//                print_hex( cbuf[x], 8);
                 break;
-				/*
-            case 9:
-                Serial.print(", \"programming_mode\": \"");
-                if ( cbuf[x] == 0x01 ) {
-                    print_hex( cbuf[x], 8);
-                } else {
-                    Serial.print("0");
-                }
-                Serial.print("\"");
-                break;
-				*/
             case 10:
                 if ( cbuf[x] != 0x00 ) {
-                    Serial.print(",\"prompt_pos\": \"");
+					Serial.print(sep);
+                    Serial.print("\"prompt_pos\": \"");
                     Serial.print( (int)cbuf[x] );
                     print_hex( cbuf[x], 8);
                     Serial.print("\"");
                 }
 
                 break;
-            default:
-//                print_hex( cbuf[x], 8);
-//                Serial.print(";");
-                break;
             }
 	}
-	Serial.print(",\"msg\": \"");
+	Serial.print(sep);
+	Serial.print("\"msg\": \"");
 	for (int x = 12; x < *idx -1; x++) {
 		if ((int)cbuf[x] < 32 || (int)cbuf[x] > 126) {
 		    //don't print non printable ascii
@@ -558,11 +530,9 @@ void on_display(char cbuf[], int *idx) {
 
 	Serial.println("\"}");
 		
-	//DEBUG
 	#ifdef DEBUG_DISPLAY
 	print_unknown_json( cbuf , *idx );
 	#endif
-
 }
 
 void on_poll() {
@@ -940,9 +910,9 @@ void switch_first_byte(int x, SoftwareSerial vista) {
 
 	if (expect_byt != '\0' && x != expect_byt) {
 		if(!_on_response_error(&x)) {
-			Serial.print("{\"type\":\"error\",\"msg\":\"Unexpected byte with no error handler set. ");
+			Serial.print(F("{\"type\":\"error\",\"msg\":\"Unexpected byte with no error handler set."));
 			print_hex(x, 8);
-			Serial.println("\"}");
+			Serial.println(F("\"}"));
 		}
 		clear_expect();
 	}
