@@ -73,7 +73,7 @@ MONITOR_PORT      = /dev/tty.usbmodem*
 CURRENT_DIR       = $(shell basename $(CURDIR))
 OBJDIR            = $(PROJECT_DIR)/bin/$(CURRENT_DIR)/$(BOARD_TAG)
 
-ARDUINO_LIBS      = Wire SPI Ethernet
+ARDUINO_LIBS      = Wire SPI Ethernet EEPROM
 
 AVRDUDE_CONF     = /etc/avrdude.conf
 USER_SRC = src/alta_veesta

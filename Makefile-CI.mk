@@ -65,7 +65,7 @@ CURRENT_DIR       = $(shell basename $(CURDIR))
 ### This is were you put the binaries you just compile using 'make'
 OBJDIR            = $(PROJECT_DIR)/bin/$(BOARD_TAG)/$(CURRENT_DIR)
 
-ARDUINO_LIBS      = Wire SPI Ethernet
+ARDUINO_LIBS      = Wire SPI Ethernet EEPROM
 
 USER_SRC = src/alta_veesta
 
