@@ -646,6 +646,7 @@ void on_lrr(char cbuf[], int *idx, SoftwareSerial &vista) {
 	tunedDelay(400);
 	Trouble tr;
 	tr.code = 0;
+
 	//0x52 means respond with only cycle message
 	//0x48 means same thing
 	//, i think 0x42 and and 0x58 are the same
@@ -695,12 +696,14 @@ void on_lrr(char cbuf[], int *idx, SoftwareSerial &vista) {
 		lcbuflen++;
 	}
 
+	#ifdef LRR_SUPERVISOR
 	for (int x=0; x<lcbuflen; x++) {
 		if (!vista.write(lcbuf[x])) {
 		Serial.println("ERROR writing byte");
 		return;
 		}
 	}
+	#endif
 
 	#ifdef DEBUG_LRR
 	print_unknown_json( cbuf , *idx );

@@ -3,6 +3,10 @@
 
 //#define KPADDR 18
 
+//define this to act as a IP/GSM reporter
+//undefine if you already have a central monitoring solution
+#define LRR_SUPERVISOR
+
 //#define DEBUG
 //#define DEBUG_STATUS
 //#define DEBUG_KEYS
