@@ -453,18 +453,18 @@ void on_display(char cbuf[], int *idx) {
                 }
                 break;
             case 7:
-				Serial.print(sep);
+                Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE2_ARMED_HOME ) ) {
                     Serial.print("\"ARMED_STAY\": true");
                 } else {
                     Serial.print("\"ARMED_STAY\": false");
                 }
-				Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE2_LOW_BAT ) ) {
+                    Serial.print(sep);
                     Serial.print("\"low_batt\": true");
                 }
 
-				Serial.print(sep);
+                Serial.print(sep);
                 if ( (cbuf[x] & BIT_MASK_BYTE2_READY )) {
                     Serial.print("\"READY\": \"true\"");
                 } else {

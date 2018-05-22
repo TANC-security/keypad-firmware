@@ -43,7 +43,7 @@ void write_sys_info() {
 	#else
 	Serial.print(F("\",\"lrr_supervisor\":false"));
 	#endif
-	Serial.println(F("\"}"));
+	Serial.println(F("}"));
 }
 
 /**
