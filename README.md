@@ -117,8 +117,11 @@ In order to get perfect AND logic from multiple devices sending pulses at the sa
 ### Note on "pulsing"
 It seems like this might be a standard way to use standard UART flow control on just 2 wires.  It seems like maybe the Perl CPAN library for serial communication can understand this situation natively.  If the yellow wire is split to both a hardware implementation of both RX and CTS it might "just work".
 
-#License
-This project uses some parts of Arduino IDE - specifically the SoftwareSerial library.  So, whatever license that is under, this project is under (for the time being).
+## License
+
+This project uses some parts of Arduino IDE—specifically the `SoftwareSerial` library.
+Therefore, this software is licensed under the Lesser General Public License version 2.1,
+or (at your option) any later version. Please see [COPYING.LESSER](COPYING.LESSER) for more information.
 
 #Credits
 I could not have cracked the nut of Vista ECP protocol without knowing that it was possible by reading Miguel Sanchez's article in Circuit Cellar.  Although he did not process signals sent from the panel, he figured out the baud rate, stop bit configuration, and the fact that the signal is inversed (0 is high, 1 is low).
