@@ -128,7 +128,7 @@ This project uses some parts of Arduino IDE—specifically the `SoftwareSerial` 
 Therefore, this software is licensed under the Lesser General Public License version 2.1,
 or (at your option) any later version. Please see [COPYING.LESSER](COPYING.LESSER) for more information.
 
-#Credits
+# Credits
 I could not have cracked the nut of Vista ECP protocol without knowing that it was possible by reading Miguel Sanchez's article in Circuit Cellar.  Although he did not process signals sent from the panel, he figured out the baud rate, stop bit configuration, and the fact that the signal is inversed (0 is high, 1 is low).
 
 Other projects that were invaluable to me are:
