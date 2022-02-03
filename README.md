@@ -8,6 +8,11 @@ Web based front-end at: https://github.com/TANC-security/
 
 YT video playlist: https://www.youtube.com/playlist?list=PLd8PQg3ICYP5eQcQP_Dx9Q2uO97RlXmbC
 
+# Check out an ESP8266 that works with HomeAssistant
+
+https://github.com/Dilbert66/esphome-vistaECP
+
+
 # Development on Debian/Ubuntu
 Install gcc-avr and avr-libc packages
 
